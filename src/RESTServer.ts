@@ -85,7 +85,7 @@ export class RESTServer {
     this._import(directory, failedDirs);
     return failedDirs;
   }
-  private async _import(path: string, failedImports: string[]) {
+  private async _import(path: string, failedImports: string[]): Promise<void> {
     await Promise.all(
       (
         await fsp.readdir(path)
