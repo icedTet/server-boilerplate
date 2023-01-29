@@ -11,7 +11,7 @@ export interface SocketHandler<T> {
 }
 export type SocketServerOptions = {
   server: RESTServer;
-  getUser?: (req: Socket) => Promise<any>;
+  getUser?: (req: Socket) => Promise<any> | any;
   forceAuth?: boolean;
   authCheck?: (req: Socket) => Promise<boolean> | boolean;
   port: number;

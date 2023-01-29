@@ -36,7 +36,7 @@ export class RESTServer {
   express: Express;
   server: Server;
   handlers: Set<RESTHandler<any>>;
-  getUser?: (req: Request) => Promise<any>;
+  getUser?: (req: Request) => Promise<any> | any;
   constructor(opts: RESTServerOptions) {
     this.express = express();
     this.handlers = new Set();
