@@ -14,7 +14,6 @@ export type SocketServerOptions = {
   getUser?: (req: Socket) => Promise<any> | any;
   forceAuth?: boolean;
   authCheck?: (req: Socket) => Promise<boolean> | boolean;
-  port: number;
   key?: string;
   cert?: string;
 };
