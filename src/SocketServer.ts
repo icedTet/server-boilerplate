@@ -59,7 +59,7 @@ export class SocketServer {
       const user = await this.getUser?.(socket);
       return handler.run(socket, user, ...args);
     }
-    return handler.run(socket, ...args);
+    return handler.run(socket, null, ...args);
   }
   addHandler<T>(handler: SocketHandler<T>) {
     this.handlers.set(handler.event, handler);
