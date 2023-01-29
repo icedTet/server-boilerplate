@@ -1,5 +1,6 @@
 import { Server, Socket } from "socket.io";
 import { RESTServer } from "./RESTServer";
+import * as fsp from "fs/promises";
 export interface SocketHandler<T> {
   event: string;
   sendUser: boolean;
@@ -61,6 +62,42 @@ export class SocketServer {
   }
   addHandler<T>(handler: SocketHandler<T>) {
     this.handlers.set(handler.event, handler);
+  }
+  import(directory: string) {
+    let failedDirs = [] as string[];
+    this._import(directory, failedDirs);
+    return failedDirs;
+  }
+  private async _import(path: string, failedImports: string[]): Promise<void> {
+    await Promise.all(
+      (
+        await fsp.readdir(path)
+      ).map(async (file) => {
+        if ((await fsp.lstat(`${path}/${file}`)).isDirectory()) {
+          console.log(`Importing Folder ${path}/${file}`);
+          return await this._import(`${path}/${file}`, failedImports);
+        }
+        if (!file.endsWith(".ts") && !file.endsWith(".js")) {
+          return;
+        }
+        import(`${path}/${file}`)
+          .then((module) => {
+            console.log(`${file} imported`);
+            const handler = module.default as SocketHandler<any>;
+            if (!handler) {
+              return failedImports.push(`${file} is not a REST handler`);
+            }
+            console.log(handler);
+            this.addHandler(handler);
+            console.log(`Loaded ${file}`);
+          })
+          .catch((err) => {
+            console.error(`Failed to import ${file}`);
+            console.error(err);
+            failedImports.push(`${file} failed to import`);
+          });
+      })
+    );
   }
   removeHandler(handler: SocketHandler<any>) {
     this.handlers.delete(handler.event);
