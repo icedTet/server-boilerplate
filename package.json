@@ -6,7 +6,7 @@
     "socket.io": "^4.5.4"
   },
   "name": "tetion-server-boilerplate",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Boilerplate for an Express REST + Socket.IO server that looks decently clean.",
   "main": "dist/index.js",
   "author": "John Li (Tet) <tet@tet.moe>",
