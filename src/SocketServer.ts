@@ -5,6 +5,7 @@ export interface SocketHandler<T> {
   event: string;
   sendUser: boolean;
   run: (
+    socket: Socket,
     user?: T,
     ...args: any[]
   ) => //   next: NextFunction,
@@ -56,9 +57,9 @@ export class SocketServer {
     }
     if (handler.sendUser) {
       const user = await this.getUser?.(socket);
-      return handler.run(user, ...args);
+      return handler.run(socket, user, ...args);
     }
-    return handler.run(...args);
+    return handler.run(socket, ...args);
   }
   addHandler<T>(handler: SocketHandler<T>) {
     this.handlers.set(handler.event, handler);
